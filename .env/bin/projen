@@ -1,0 +1,10 @@
+#!/Users/timo.hirt/IdeaProjects/prometheus-ecs-sd/.env/bin/python3.11
+
+import jsii
+import sys
+
+__jsii_assembly__ = jsii.JSIIAssembly.load(
+    "projen", "0.58.36", "projen", "projen@0.58.36.jsii.tgz"
+)
+
+__jsii_assembly__.invokeBinScript("projen", "projen", sys.argv[1:])
