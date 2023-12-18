@@ -373,11 +373,12 @@ def task_info_to_targets(task_info):
 
 class Main:
 
-    def __init__(self, directory, interval, roles):
+    def __init__(self, directory, interval, roles, verbose=False):
         self.directory = directory
         self.interval = interval
         self.roles = roles
         self.discoverer = TaskInfoDiscoverer()
+        self.verbose = verbose
 
     def write_jobs(self, jobs):
         for i, j in jobs.items():
@@ -438,7 +439,8 @@ class Main:
                 if labels:
                     job['labels'].update(labels)
                 jobs[interval].append(job)
-                log(job)
+                if self.verbose:
+                    log("Discovered Job: " + str(job))
         self.write_jobs(jobs)
 
     def loop(self):
@@ -451,9 +453,10 @@ def main():
     arg_parser.add_argument('--directory', required=True)
     arg_parser.add_argument('--interval', default=60)
     arg_parser.add_argument('--roles', nargs='*', default=None)
+    arg_parser.add_argument("--verbose", action="store_true", help="increase output verbosity")
     args = arg_parser.parse_args()
     log('Starting. Directory: ' + args.directory + '. Interval: ' + str(args.interval) + 's.')
-    Main(args.directory, float(args.interval), args.roles).loop()
+    Main(args.directory, float(args.interval), args.roles, verbose=args.verbose).loop()
 
 if __name__== "__main__":
     main()
