@@ -5,7 +5,7 @@ Find the Europace documentation on how to use this in [shared-monitoring](https:
 
 ## Deployment
 
-Building the Docker image, pushing it to ECR and deploying to as sidecar are manual steps.
+Building the Container image, pushing it to ECR and deploying to as sidecar are manual steps.
 
 1. Login to `ep-shared` AWS account. 
 2. Locate ECR repository `/prom/prometheus-ecs-sd`.
@@ -21,7 +21,8 @@ Building the Docker image, pushing it to ECR and deploying to as sidecar are man
     podman push 856650302511.dkr.ecr.eu-central-1.amazonaws.com/prom/prometheus-ecs-sd:latest
     ```
 5. Change version in Prometheus sidecars for deployment:
-  - https://github.com/europace/eks-services-observability/blob/6ce425388523c2e8faf5fd1453fb55c083e028da/cdk8s/src/namespaces/shared-monitoring/common.ts#L6
+    - [ps.ecsDiscoveryImageVersion](https://github.com/europace/eks-services-observability/blob/88a285430d418f781997e285906cd37fd34c7cfe/cdk8s/src/namespaces/shared-monitoring/common.ts#L6)
+    - [mtp.ecsDiscoveryImageVersion](https://github.com/europace/eks-services-observability/blob/88a285430d418f781997e285906cd37fd34c7cfe/cdk8s/src/namespaces/shared-monitoring/common.ts#L29)
 
 ## Info
 This tool provides Prometheus service discovery for Docker containers running on AWS ECS. You can easily instrument your app using a Prometheus
