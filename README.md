@@ -1,6 +1,28 @@
 # prometheus-ecs-sd
 ECS Service Discovery for Prometheus
 
+Find the Europace documentation on how to use this in [shared-monitoring](https://github.com/europace-platform/shared-monitoring/blob/b9657bf2e759daea4d14b21bb1ec3b0441142024/docs/ecs%20monitoring.md)
+
+## Deployment
+
+Building the Docker image, pushing it to ECR and deploying to as sidecar are manual steps.
+
+1. Login to `ep-shared` AWS account. 
+2. Locate ECR repository `/prom/prometheus-ecs-sd`.
+3. Figure out latest version (eg. `v1.5`) and then increase by one minor. This is the new version (eg. `v1.6`).
+4. Run the following commands in the root of this directory to 
+    ```shell
+    awsume ep-shared.Europace-PaaS-Admin
+    aws ecr get-login-password --region eu-central-1 | podman login --username AWS --password-stdin 856650302511.dkr.ecr.eu-central-1.amazonaws.com
+    podman build -t prom/prometheus-ecs-sd:latest .
+    podman tag prom/prometheus-ecs-sd:latest 856650302511.dkr.ecr.eu-central-1.amazonaws.com/prom/prometheus-ecs-sd:v1.5
+    podman push 856650302511.dkr.ecr.eu-central-1.amazonaws.com/prom/prometheus-ecs-sd:v1.5
+    podman tag prom/prometheus-ecs-sd:latest 856650302511.dkr.ecr.eu-central-1.amazonaws.com/prom/prometheus-ecs-sd:latest
+    podman push 856650302511.dkr.ecr.eu-central-1.amazonaws.com/prom/prometheus-ecs-sd:latest
+    ```
+5. Change version in Prometheus sidecars for deployment:
+  - https://github.com/europace/eks-services-observability/blob/6ce425388523c2e8faf5fd1453fb55c083e028da/cdk8s/src/namespaces/shared-monitoring/common.ts#L6
+
 ## Info
 This tool provides Prometheus service discovery for Docker containers running on AWS ECS. You can easily instrument your app using a Prometheus
 client and enable discovery adding an ENV variable at the Service Task Definition. Your container will then be added
