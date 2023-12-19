@@ -14,11 +14,13 @@ Building the Container image, pushing it to ECR and deploying to as sidecar are 
     ```shell
     awsume ep-shared.Europace-PaaS-Admin
     aws ecr get-login-password --region eu-central-1 | podman login --username AWS --password-stdin 856650302511.dkr.ecr.eu-central-1.amazonaws.com
-    podman build -t prom/prometheus-ecs-sd:latest .
+    podman build --platform linux/amd64 -t prom/prometheus-ecs-sd:latest .
     podman tag prom/prometheus-ecs-sd:latest 856650302511.dkr.ecr.eu-central-1.amazonaws.com/prom/prometheus-ecs-sd:v1.5
     podman push 856650302511.dkr.ecr.eu-central-1.amazonaws.com/prom/prometheus-ecs-sd:v1.5
     podman tag prom/prometheus-ecs-sd:latest 856650302511.dkr.ecr.eu-central-1.amazonaws.com/prom/prometheus-ecs-sd:latest
     podman push 856650302511.dkr.ecr.eu-central-1.amazonaws.com/prom/prometheus-ecs-sd:latest
+    podman tag prom/prometheus-ecs-sd:latest 856650302511.dkr.ecr.eu-central-1.amazonaws.com/prom/prometheus-ecs-sd:amd64
+    podman push 856650302511.dkr.ecr.eu-central-1.amazonaws.com/prom/prometheus-ecs-sd:amd64
     ```
 5. Change version in Prometheus sidecars for deployment:
     - [ps.ecsDiscoveryImageVersion](https://github.com/europace/eks-services-observability/blob/88a285430d418f781997e285906cd37fd34c7cfe/cdk8s/src/namespaces/shared-monitoring/common.ts#L6)
